@@ -137,6 +137,10 @@ public class SpecificationServiceImpl implements SpecificationService {
 		return new PageResult((int) page.getTotal(), page.getResult());
 	}
 
+	@Override
+	public List<Map> selectOptionList() {
+		return specificationMapper.selectOptionList();
+	}
 
 
 }
