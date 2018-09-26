@@ -21,7 +21,25 @@ public class SellerController {
 
 	@Reference
 	private SellerService sellerService;
-	
+
+	/**
+	 * 更改状态
+	 * @param sellerId
+	 * @param status
+	 * @return
+	 */
+	@RequestMapping("/updateStatus")
+	public Result updateStatus(String sellerId,String status){
+		try{
+			sellerService.updateStatus(sellerId,status);
+			return new Result(true,"成功");
+		} catch (Exception e){
+			e.printStackTrace();
+			return new Result(false,"失败");
+		}
+
+	}
+
 	/**
 	 * 返回全部列表
 	 * @return

@@ -9,6 +9,11 @@ import entity.PageResult;
  *
  */
 public interface SellerService {
+	/**
+	 * 更改状态
+	 * @param status
+	 */
+	public void updateStatus(String sellerId,String status);
 
 	/**
 	 * 返回全部列表

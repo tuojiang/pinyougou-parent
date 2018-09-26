@@ -2,7 +2,20 @@
 app.controller('sellerController' ,function($scope,$controller   ,sellerService){	
 	
 	$controller('baseController',{$scope:$scope});//继承
-	
+
+	//更改状态
+    $scope.updateStatus=function(sellerId,status){
+        sellerService.updateStatus(sellerId,status).success(
+            function(response){
+                if(response.success){
+                    $scope.reloadList();//刷新列表
+                }else{
+                    alert("失败");
+                }
+            }
+        );
+    }
+
     //读取列表数据绑定到表单中  
 	$scope.findAll=function(){
 		sellerService.findAll().success(
