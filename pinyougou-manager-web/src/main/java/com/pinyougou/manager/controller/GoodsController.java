@@ -51,15 +51,13 @@ public class GoodsController {
 	 * @return
 	 */
 	@RequestMapping("/add")
-	public Result add(@RequestBody Goods goods){
-		String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
-		try{
-			goods.getGoods().setSellerId(sellerId);
+	public Result add(@RequestBody TbGoods goods){
+		try {
 			goodsService.add(goods);
-			return new Result(true,"增加成功");
-		}catch (Exception e){
+			return new Result(true, "增加成功");
+		} catch (Exception e) {
 			e.printStackTrace();
-			return new Result(false,"增加失败");
+			return new Result(false, "增加失败");
 		}
 	}
 	
