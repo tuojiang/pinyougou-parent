@@ -2,6 +2,7 @@ package com.pinyougou.sellergoods.service;
 import java.util.List;
 import com.pinyougou.pojo.TbGoods;
 
+import com.pinyougou.pojogroup.Goods;
 import entity.PageResult;
 /**
  * 服务层接口
@@ -10,6 +11,11 @@ import entity.PageResult;
  */
 public interface GoodsService {
 
+	/**
+	 * 增加
+	 * @param goods
+	 */
+	public void add(Goods goods);
 	/**
 	 * 返回全部列表
 	 * @return

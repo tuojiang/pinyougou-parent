@@ -59,7 +59,10 @@ public interface TypeTemplateService {
 	 * @return
 	 */
 	public PageResult findPage(TbTypeTemplate typeTemplate, int pageNum, int pageSize);
-	
 
+	/**
+	 * 规格下拉框数据
+	 */
+	List<Map> selectOptionList();
 	
 }

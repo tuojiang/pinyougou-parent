@@ -104,7 +104,9 @@ app.controller('typeTemplateController' ,function($scope,$controller   ,typeTemp
 				}
 		);		
 	}
-	
+
+
+
 	//增加扩展属性行
 	$scope.addTableRow=function(){
 		$scope.entity.customAttributeItems.push({});
@@ -113,5 +115,7 @@ app.controller('typeTemplateController' ,function($scope,$controller   ,typeTemp
 	$scope.deleTableRow=function(index){
 		$scope.entity.customAttributeItems.splice( index,1);
 	}
-	
+
+
+
 });	

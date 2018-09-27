@@ -2,7 +2,19 @@
 app.controller('goodsController' ,function($scope,$controller   ,goodsService){	
 	
 	$controller('baseController',{$scope:$scope});//继承
-	
+	//增加商品
+	$scope.add = function(){
+		goodsService.add($scope.entity).success(
+			function (response) {
+				if (response.success()){
+                    alert('保存成功');
+					$scope.entity = {};
+				} else {
+                    alert(response.message);
+                }
+            }
+		);
+	}
     //读取列表数据绑定到表单中  
 	$scope.findAll=function(){
 		goodsService.findAll().success(

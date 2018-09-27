@@ -1,5 +1,7 @@
 package com.pinyougou.sellergoods.service.impl;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
@@ -22,7 +24,20 @@ public class ItemCatServiceImpl implements ItemCatService {
 
 	@Autowired
 	private TbItemCatMapper itemCatMapper;
-	
+
+	/**
+	 * 根据父类ID查询列表
+	 * @param parentId
+	 * @return
+	 */
+	@Override
+	public List<TbItemCat> findByParentId(Long parentId) {
+		TbItemCatExample example = new TbItemCatExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andParentIdEqualTo(parentId);
+		return itemCatMapper.selectByExample(example);
+	}
+
 	/**
 	 * 查询全部
 	 */
@@ -96,5 +111,6 @@ public class ItemCatServiceImpl implements ItemCatService {
 		Page<TbItemCat> page= (Page<TbItemCat>)itemCatMapper.selectByExample(example);		
 		return new PageResult((int) page.getTotal(), page.getResult());
 	}
-	
+
+
 }
