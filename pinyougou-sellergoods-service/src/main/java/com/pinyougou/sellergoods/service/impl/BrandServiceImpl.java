@@ -20,6 +20,7 @@ import java.util.Map;
  * @Description:
  */
 @Service
+@Transactional
 public class BrandServiceImpl implements BrandService {
 
     @Autowired

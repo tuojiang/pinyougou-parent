@@ -24,6 +24,7 @@ import entity.PageResult;
  *
  */
 @Service
+@Transactional
 public class SpecificationServiceImpl implements SpecificationService {
 	@Autowired
 	private TbSpecificationMapper specificationMapper;
