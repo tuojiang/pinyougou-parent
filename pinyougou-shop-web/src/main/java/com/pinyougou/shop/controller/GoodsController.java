@@ -67,7 +67,15 @@ public class GoodsController {
 	 * @return
 	 */
 	@RequestMapping("/update")
-	public Result update(@RequestBody TbGoods goods){
+	public Result update(@RequestBody Goods goods){
+		//当前商家ID
+		String sellerid = SecurityContextHolder.getContext().getAuthentication().getName();
+		//首先判断商品是否是该商家的商品
+		Goods goods1 = goodsService.findOne(goods.getGoods().getId());
+		if (!goods1.getGoods().getSellerId().equals(sellerid)||!goods.getGoods().getSellerId().equals(sellerid)){
+			return new Result(false, "非法操作");
+		}
+
 		try {
 			goodsService.update(goods);
 			return new Result(true, "修改成功");
@@ -118,5 +126,19 @@ public class GoodsController {
         goods.setSellerId(sellerId);
 		return goodsService.findPage(goods, page, rows);		
 	}
-	
-}
+	/**
+	 * 更新状态
+	 * @param ids
+	 * @param status
+	 */
+	@RequestMapping("/updateStatus")
+	public Result updateStatus(Long[] ids, String status){
+		try{
+			goodsService.updateStatus(ids,status);
+			return new Result(true,"更新成功");
+		} catch (Exception e){
+			e.printStackTrace();
+			return new Result(false,"更新失败");
+		}
+	}
+	}
