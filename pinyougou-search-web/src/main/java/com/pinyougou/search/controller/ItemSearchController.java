@@ -17,12 +17,15 @@ import java.util.Map;
 @RestController
 @RequestMapping("/itemsearch")
 public class ItemSearchController {
+	
+	@Reference
+	private ItemSearchService itemSearchService;
+	
+	@RequestMapping("/search")
+	public Map search(@RequestBody Map searchMap){
+		
+		return itemSearchService.search(searchMap);
+		
+	}
 
-    @Reference
-    private ItemSearchService itemSearchService;
-
-    @RequestMapping("/search")
-    public Map search(@RequestBody Map seachMap){
-        return itemSearchService.search(seachMap);
-    }
 }

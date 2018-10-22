@@ -2,6 +2,7 @@ package com.pinyougou.sellergoods.service.impl;
 import java.util.List;
 import java.util.Map;
 
+import com.pinyougou.pojo.TbTypeTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
@@ -13,6 +14,7 @@ import com.pinyougou.pojo.TbItemCatExample.Criteria;
 import com.pinyougou.sellergoods.service.ItemCatService;
 
 import entity.PageResult;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -26,20 +28,7 @@ public class ItemCatServiceImpl implements ItemCatService {
 
 	@Autowired
 	private TbItemCatMapper itemCatMapper;
-
-	/**
-	 * 根据父类ID查询列表
-	 * @param parentId
-	 * @return
-	 */
-	@Override
-	public List<TbItemCat> findByParentId(Long parentId) {
-		TbItemCatExample example = new TbItemCatExample();
-		Criteria criteria = example.createCriteria();
-		criteria.andParentIdEqualTo(parentId);
-		return itemCatMapper.selectByExample(example);
-	}
-
+	
 	/**
 	 * 查询全部
 	 */
@@ -96,7 +85,7 @@ public class ItemCatServiceImpl implements ItemCatService {
 	}
 	
 	
-		@Override
+	@Override
 	public PageResult findPage(TbItemCat itemCat, int pageNum, int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
 		
@@ -113,6 +102,27 @@ public class ItemCatServiceImpl implements ItemCatService {
 		Page<TbItemCat> page= (Page<TbItemCat>)itemCatMapper.selectByExample(example);		
 		return new PageResult((int) page.getTotal(), page.getResult());
 	}
+		
+	@Autowired
+	private RedisTemplate redisTemplate;
 
-
+	@Override
+	public List<TbItemCat> findByParentId(Long parentId) {
+		TbItemCatExample example = new TbItemCatExample();
+		Criteria criteria = example.createCriteria();
+		// 设置条件:
+		criteria.andParentIdEqualTo(parentId);
+		// 条件查询
+		
+		//将模板ID放入缓存（以商品分类名称作为key）	
+		
+		List<TbItemCat> itemCatList = findAll();
+		for(TbItemCat itemCat:itemCatList){
+			redisTemplate.boundHashOps("itemCat").put(itemCat.getName(), itemCat.getTypeId());
+		}
+		System.out.println("将模板ID放入缓存");
+		
+		return itemCatMapper.selectByExample(example);
+	}
+	
 }
