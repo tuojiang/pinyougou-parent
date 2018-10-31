@@ -1,7 +1,9 @@
 package com.pinyougou.sellergoods.service.impl;
 import java.util.Date;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -12,7 +14,6 @@ import com.pinyougou.pojo.TbSellerExample.Criteria;
 import com.pinyougou.sellergoods.service.SellerService;
 
 import entity.PageResult;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 服务实现层
@@ -20,19 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
  *
  */
 @Service
-@Transactional
 public class SellerServiceImpl implements SellerService {
 
 	@Autowired
 	private TbSellerMapper sellerMapper;
-
-	@Override
-	public void updateStatus(String sellerId, String status) {
-		TbSeller seller = sellerMapper.selectByPrimaryKey(sellerId);
-		seller.setStatus(status);
-		sellerMapper.updateByPrimaryKey(seller);
-	}
-
+	
 	/**
 	 * 查询全部
 	 */
@@ -48,7 +41,7 @@ public class SellerServiceImpl implements SellerService {
 	public PageResult findPage(int pageNum, int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);		
 		Page<TbSeller> page=   (Page<TbSeller>) sellerMapper.selectByExample(null);
-		return new PageResult((int) page.getTotal(), page.getResult());
+		return new PageResult(page.getTotal(), page.getResult());
 	}
 
 	/**
@@ -56,8 +49,11 @@ public class SellerServiceImpl implements SellerService {
 	 */
 	@Override
 	public void add(TbSeller seller) {
+		// 设置商家状态
 		seller.setStatus("0");
+		
 		seller.setCreateTime(new Date());
+		
 		sellerMapper.insert(seller);		
 	}
 
@@ -169,7 +165,17 @@ public class SellerServiceImpl implements SellerService {
 		}
 		
 		Page<TbSeller> page= (Page<TbSeller>)sellerMapper.selectByExample(example);		
-		return new PageResult((int) page.getTotal(), page.getResult());
+		return new PageResult(page.getTotal(), page.getResult());
+	}
+
+		
+	@Override
+	public void updateStatus(String sellerId, String status) {
+		TbSeller seller = sellerMapper.selectByPrimaryKey(sellerId);
+		
+		seller.setStatus(status);
+		
+		sellerMapper.updateByPrimaryKey(seller);
 	}
 	
 }

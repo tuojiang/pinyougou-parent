@@ -35,6 +35,7 @@ public class TbItem implements Serializable{
     private String status;
 
     private Date createTime;
+
     @Field("item_updatetime")
     private Date updateTime;
 
@@ -246,6 +247,7 @@ public class TbItem implements Serializable{
     public void setBrand(String brand) {
         this.brand = brand == null ? null : brand.trim();
     }
+    
 
     public String getSpec() {
         return spec;

@@ -9,11 +9,6 @@ import entity.PageResult;
  *
  */
 public interface SellerService {
-	/**
-	 * 更改状态
-	 * @param status
-	 */
-	public void updateStatus(String sellerId,String status);
 
 	/**
 	 * 返回全部列表
@@ -26,7 +21,7 @@ public interface SellerService {
 	 * 返回分页列表
 	 * @return
 	 */
-	public PageResult findPage(int pageNum, int pageSize);
+	public PageResult findPage(int pageNum,int pageSize);
 	
 	
 	/**
@@ -53,7 +48,7 @@ public interface SellerService {
 	 * 批量删除
 	 * @param ids
 	 */
-	public void delete(String[] ids);
+	public void delete(String [] ids);
 
 	/**
 	 * 分页
@@ -61,6 +56,8 @@ public interface SellerService {
 	 * @param pageSize 每页记录数
 	 * @return
 	 */
-	public PageResult findPage(TbSeller seller, int pageNum, int pageSize);
+	public PageResult findPage(TbSeller seller, int pageNum,int pageSize);
 	
+	
+	public void updateStatus(String sellerId,String status);
 }

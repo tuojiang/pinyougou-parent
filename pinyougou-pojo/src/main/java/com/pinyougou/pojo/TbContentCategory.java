@@ -7,7 +7,6 @@ public class TbContentCategory implements Serializable{
 
     private String name;
 
-
     public Long getId() {
         return id;
     }
@@ -23,6 +22,4 @@ public class TbContentCategory implements Serializable{
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
     }
-
-
 }

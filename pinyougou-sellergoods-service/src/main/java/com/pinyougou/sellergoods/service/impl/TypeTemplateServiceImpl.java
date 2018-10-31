@@ -2,23 +2,23 @@ package com.pinyougou.sellergoods.service.impl;
 import java.util.List;
 import java.util.Map;
 
-import com.alibaba.fastjson.JSON;
-import com.pinyougou.mapper.TbSpecificationOptionMapper;
-import com.pinyougou.pojo.TbSpecificationOption;
-import com.pinyougou.pojo.TbSpecificationOptionExample;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.pinyougou.mapper.TbSpecificationOptionMapper;
 import com.pinyougou.mapper.TbTypeTemplateMapper;
+import com.pinyougou.pojo.TbSpecificationOption;
+import com.pinyougou.pojo.TbSpecificationOptionExample;
 import com.pinyougou.pojo.TbTypeTemplate;
 import com.pinyougou.pojo.TbTypeTemplateExample;
 import com.pinyougou.pojo.TbTypeTemplateExample.Criteria;
 import com.pinyougou.sellergoods.service.TypeTemplateService;
 
 import entity.PageResult;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 服务实现层
@@ -26,17 +26,11 @@ import org.springframework.transaction.annotation.Transactional;
  *
  */
 @Service
-@Transactional
 public class TypeTemplateServiceImpl implements TypeTemplateService {
 
 	@Autowired
-	private TbSpecificationOptionMapper specificationOptionMapper;
-
-	@Autowired
 	private TbTypeTemplateMapper typeTemplateMapper;
-
-	@Autowired
-	private RedisTemplate redisTemplate;
+	
 	/**
 	 * 查询全部
 	 */
@@ -52,7 +46,7 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 	public PageResult findPage(int pageNum, int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);		
 		Page<TbTypeTemplate> page=   (Page<TbTypeTemplate>) typeTemplateMapper.selectByExample(null);
-		return new PageResult((int) page.getTotal(), page.getResult());
+		return new PageResult(page.getTotal(), page.getResult());
 	}
 
 	/**
@@ -93,7 +87,7 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 	}
 	
 	
-	@Override
+		@Override
 	public PageResult findPage(TbTypeTemplate typeTemplate, int pageNum, int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
 		
@@ -115,18 +109,18 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 			}
 	
 		}
+		
+		Page<TbTypeTemplate> page= (Page<TbTypeTemplate>)typeTemplateMapper.selectByExample(example);
+		
+		//缓存处理
+		saveToRedis();
+		
+		return new PageResult(page.getTotal(), page.getResult());
+	}
+		
+	@Autowired
+	private RedisTemplate redisTemplate;
 	
-		Page<TbTypeTemplate> page= (Page<TbTypeTemplate>)typeTemplateMapper.selectByExample(example);		
-     	saveToRedis();//存入数据到缓存
-		return new PageResult((int) page.getTotal(), page.getResult());
-	}
-
-	@Override
-	public List<Map> selectOptionList() {
-
-		return null;
-	}
-
 	/**
 	 * 将品牌列表与规格列表放入缓存
 	 */
@@ -145,9 +139,12 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 		System.out.println("缓存品牌列表");
 		
 	}
-
-
-	@Override
+		
+		
+		@Autowired
+		private TbSpecificationOptionMapper specificationOptionMapper ;
+		
+		@Override
 		public List<Map> findSpecList(Long id) {
 			//根据ID查询到模板对象
 			TbTypeTemplate typeTemplate = typeTemplateMapper.selectByPrimaryKey(id);

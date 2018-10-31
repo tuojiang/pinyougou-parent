@@ -1,64 +1,48 @@
 package com.pinyougou.sellergoods.service;
 
-import com.pinyougou.pojo.TbBrand;
-import entity.PageResult;
-
 import java.util.List;
 import java.util.Map;
 
+import com.pinyougou.pojo.TbBrand;
+
+import entity.PageResult;
+
 /**
- * @program: com.pinyougou
- * @Date: 2018/9/16
- * @Author: chandler
- * @Description:
+ * 品牌管理的服务层接口
+ * @author jt
+ *
  */
 public interface BrandService {
-
-    public List<TbBrand> findAll();
-
-    /**
-     * 返回分页列表
-     * @param pageNum
-     * @param pageSize
-     * @return
-     */
-    public PageResult findPage(int pageNum,int pageSize);
-
-    /**
-     * 增加
-     * @param tbBrand
-     */
-    public void add(TbBrand tbBrand);
-
-    /**
-     * 修改
-     * @param tbBrand
-     */
-    public void update(TbBrand tbBrand);
-
-    /**
-     * 根据ID查找
-     * @param id
-     * @return
-     */
-    public TbBrand findOne(Long id);
-
-    /**
-     * 删除
-     * @param ids
-     */
-    public void delete(Long[] ids);
-
-    /**
-     * 条件查询
-     * @param tbBrand
-     * @param pageNum
-     * @param pageSize
-     * @return
-     */
-    public PageResult findPage(TbBrand tbBrand,int pageNum,int pageSize);
-    /**
-     * 品牌下拉框数据
-     */
-    List<Map> selectOptionList();
+	/**
+	 * 查询所有品牌列表的接口的方法
+	 * @return
+	 */
+	public List<TbBrand> findAll();
+	
+	/**
+	 * 分页查询品牌的方法
+	 */
+	public PageResult findByPage(TbBrand brand,int pageNum,int pageSize);
+	
+	/**
+	 * 保存品牌的方法
+	 */
+	public void save(TbBrand brand);
+	
+	/**
+	 * 查询一个品牌
+	 */
+	public TbBrand findById(Long id);
+	
+	/**
+	 * 修改品牌的方法
+	 */
+	public void update(TbBrand brand);
+	
+	/**
+	 * 删除多个
+	 */
+	public void delete(Long[] ids);
+	
+	public List<Map> selectOptionList();
 }

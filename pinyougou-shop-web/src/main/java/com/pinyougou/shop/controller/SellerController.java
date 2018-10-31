@@ -1,17 +1,16 @@
 package com.pinyougou.shop.controller;
-import com.alibaba.dubbo.config.annotation.Reference;
-import com.pinyougou.pojo.TbSeller;
-import com.pinyougou.sellergoods.service.SellerService;
-import entity.PageResult;
-import entity.Result;
+import java.util.List;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.alibaba.dubbo.config.annotation.Reference;
+import com.pinyougou.pojo.TbSeller;
+import com.pinyougou.sellergoods.service.SellerService;
 
-import java.util.List;
-
-
+import entity.PageResult;
+import entity.Result;
 /**
  * controller
  * @author Administrator
@@ -23,14 +22,13 @@ public class SellerController {
 
 	@Reference
 	private SellerService sellerService;
-
-
+	
 	/**
 	 * 返回全部列表
 	 * @return
 	 */
 	@RequestMapping("/findAll")
-	public List<TbSeller> findAll(){
+	public List<TbSeller> findAll(){			
 		return sellerService.findAll();
 	}
 	
@@ -40,7 +38,7 @@ public class SellerController {
 	 * @return
 	 */
 	@RequestMapping("/findPage")
-	public PageResult findPage(int page, int rows){
+	public PageResult findPage(int page,int rows){			
 		return sellerService.findPage(page, rows);
 	}
 	
@@ -51,12 +49,11 @@ public class SellerController {
 	 */
 	@RequestMapping("/add")
 	public Result add(@RequestBody TbSeller seller){
-		//密码加密
-		BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
-		String password = passwordEncoder.encode(seller.getPassword());//加密
-		seller.setPassword(password);
-		
 		try {
+			
+			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+			seller.setPassword(passwordEncoder.encode(seller.getPassword()));
+			
 			sellerService.add(seller);
 			return new Result(true, "增加成功");
 		} catch (Exception e) {
@@ -109,7 +106,7 @@ public class SellerController {
 	
 		/**
 	 * 查询+分页
-	 * @param seller
+	 * @param brand
 	 * @param page
 	 * @param rows
 	 * @return

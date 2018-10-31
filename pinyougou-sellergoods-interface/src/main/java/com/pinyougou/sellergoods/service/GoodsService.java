@@ -1,9 +1,10 @@
 package com.pinyougou.sellergoods.service;
 import java.util.List;
-import com.pinyougou.pojo.TbGoods;
 
+import com.pinyougou.pojo.TbGoods;
 import com.pinyougou.pojo.TbItem;
-import com.pinyougou.pojogroup.Goods;
+import com.pinyougou.pojo.group.Goods;
+
 import entity.PageResult;
 /**
  * 服务层接口
@@ -12,11 +13,6 @@ import entity.PageResult;
  */
 public interface GoodsService {
 
-	/**
-	 * 增加
-	 * @param goods
-	 */
-	public void add(Goods goods);
 	/**
 	 * 返回全部列表
 	 * @return
@@ -28,8 +24,13 @@ public interface GoodsService {
 	 * 返回分页列表
 	 * @return
 	 */
-	public PageResult findPage(int pageNum, int pageSize);
-
+	public PageResult findPage(int pageNum,int pageSize);
+	
+	
+	/**
+	 * 增加
+	*/
+	public void add(Goods goods);
 	
 	
 	/**
@@ -50,7 +51,7 @@ public interface GoodsService {
 	 * 批量删除
 	 * @param ids
 	 */
-	public void delete(Long[] ids);
+	public void delete(Long [] ids);
 
 	/**
 	 * 分页
@@ -58,21 +59,16 @@ public interface GoodsService {
 	 * @param pageSize 每页记录数
 	 * @return
 	 */
-	public PageResult findPage(TbGoods goods, int pageNum, int pageSize);
-
+	public PageResult findPage(TbGoods goods, int pageNum,int pageSize);
+	
+	public void updateStatus(Long[] ids,String status);
+	
+	
 	/**
-	 * 批量修改状态
-	 * @param ids
-	 * @param status
-	 */
-	public void updateStatus(Long []ids,String status);
-
-
-		/**
 	 * 根据SPU的ID集合查询SKU列表
 	 * @param goodsIds
 	 * @param status
 	 * @return
 	 */
-	public List<TbItem>	findItemListByGoodsIdListAndStatus(Long []goodsIds, String status);
+	public List<TbItem>	findItemListByGoodsIdListAndStatus(Long []goodsIds,String status);
 }

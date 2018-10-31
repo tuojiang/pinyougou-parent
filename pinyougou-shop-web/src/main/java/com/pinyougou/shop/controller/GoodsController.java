@@ -1,17 +1,18 @@
 package com.pinyougou.shop.controller;
 import java.util.List;
 
-import com.pinyougou.pojo.TbGoods;
-import com.pinyougou.pojogroup.Goods;
-import com.pinyougou.sellergoods.service.GoodsService;
-import entity.PageResult;
-import entity.Result;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.alibaba.dubbo.config.annotation.Reference;
 
+import com.alibaba.dubbo.config.annotation.Reference;
+import com.pinyougou.pojo.TbGoods;
+import com.pinyougou.pojo.group.Goods;
+import com.pinyougou.sellergoods.service.GoodsService;
+
+import entity.PageResult;
+import entity.Result;
 /**
  * controller
  * @author Administrator
@@ -29,7 +30,7 @@ public class GoodsController {
 	 * @return
 	 */
 	@RequestMapping("/findAll")
-	public List<TbGoods> findAll(){
+	public List<TbGoods> findAll(){			
 		return goodsService.findAll();
 	}
 	
@@ -39,7 +40,7 @@ public class GoodsController {
 	 * @return
 	 */
 	@RequestMapping("/findPage")
-	public PageResult findPage(int page, int rows){
+	public PageResult  findPage(int page,int rows){			
 		return goodsService.findPage(page, rows);
 	}
 	
@@ -50,17 +51,20 @@ public class GoodsController {
 	 */
 	@RequestMapping("/add")
 	public Result add(@RequestBody Goods goods){
-		String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
-		goods.getGoods().setSellerId(sellerId);//设置商家ID
-		
 		try {
+			// 获得商家信息:
+			String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+			
+			goods.getGoods().setSellerId(sellerId);
+			
 			goodsService.add(goods);
-			return new Result(true,"增加成功");
-		}catch (Exception e){
+			return new Result(true, "增加成功");
+		} catch (Exception e) {
 			e.printStackTrace();
-			return new Result(false,"增加失败");
+			return new Result(false, "增加失败");
 		}
 	}
+	
 	/**
 	 * 修改
 	 * @param goods
@@ -68,14 +72,14 @@ public class GoodsController {
 	 */
 	@RequestMapping("/update")
 	public Result update(@RequestBody Goods goods){
-		//当前商家ID
-		String sellerid = SecurityContextHolder.getContext().getAuthentication().getName();
-		//首先判断商品是否是该商家的商品
-		Goods goods1 = goodsService.findOne(goods.getGoods().getId());
-		if (!goods1.getGoods().getSellerId().equals(sellerid)||!goods.getGoods().getSellerId().equals(sellerid)){
+		// 获得商家信息:
+		String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		Goods goods2 = goodsService.findOne(goods.getGoods().getId());
+		if(!sellerId.equals(goods2.getGoods().getSellerId()) || !sellerId.equals(goods.getGoods().getSellerId())){
 			return new Result(false, "非法操作");
 		}
-
+		
 		try {
 			goodsService.update(goods);
 			return new Result(true, "修改成功");
@@ -113,32 +117,18 @@ public class GoodsController {
 	
 		/**
 	 * 查询+分页
-	 * @param goods
+	 * @param brand
 	 * @param page
 	 * @param rows
 	 * @return
 	 */
 	@RequestMapping("/search")
 	public PageResult search(@RequestBody TbGoods goods, int page, int rows  ){
-	    //获取商家ID
-        String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
-        //添加查询条件
-        goods.setSellerId(sellerId);
+		
+		String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+		goods.setSellerId(sellerId);
+		
 		return goodsService.findPage(goods, page, rows);		
 	}
-	/**
-	 * 更新状态
-	 * @param ids
-	 * @param status
-	 */
-	@RequestMapping("/updateStatus")
-	public Result updateStatus(Long[] ids, String status){
-		try{
-			goodsService.updateStatus(ids,status);
-			return new Result(true,"更新成功");
-		} catch (Exception e){
-			e.printStackTrace();
-			return new Result(false,"更新失败");
-		}
-	}
-	}
+	
+}

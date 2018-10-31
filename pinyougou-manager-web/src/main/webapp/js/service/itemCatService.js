@@ -1,9 +1,6 @@
 //服务层
 app.service('itemCatService',function($http){
-	 //根据上级ID查询下级列表
-	this.findByParentId = function (parentId) {
-		return $http.get('../itemCat/findByParentId.do?parentId='+parentId);
-    }
+	    	
 	//读取列表数据绑定到表单中
 	this.findAll=function(){
 		return $http.get('../itemCat/findAll.do');		
@@ -31,9 +28,9 @@ app.service('itemCatService',function($http){
 	//搜索
 	this.search=function(page,rows,searchEntity){
 		return $http.post('../itemCat/search.do?page='+page+"&rows="+rows, searchEntity);
+	}    	
+	
+	this.findByParentId = function(parentId){
+		return $http.get("../itemCat/findByParentId.do?parentId="+parentId);
 	}
-    //下拉列表
-    this.selectOptionList=function(){
-        return $http.get('../itemCat/selectOptionList.do');
-    }
 });

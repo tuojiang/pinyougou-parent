@@ -1,9 +1,8 @@
 package com.pinyougou.sellergoods.service.impl;
 import java.util.List;
-import java.util.Map;
-
-import com.pinyougou.pojo.TbTypeTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -14,8 +13,6 @@ import com.pinyougou.pojo.TbItemCatExample.Criteria;
 import com.pinyougou.sellergoods.service.ItemCatService;
 
 import entity.PageResult;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 服务实现层
@@ -23,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
  *
  */
 @Service
-@Transactional
 public class ItemCatServiceImpl implements ItemCatService {
 
 	@Autowired
@@ -44,7 +40,7 @@ public class ItemCatServiceImpl implements ItemCatService {
 	public PageResult findPage(int pageNum, int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);		
 		Page<TbItemCat> page=   (Page<TbItemCat>) itemCatMapper.selectByExample(null);
-		return new PageResult((int) page.getTotal(), page.getResult());
+		return new PageResult(page.getTotal(), page.getResult());
 	}
 
 	/**
@@ -85,7 +81,7 @@ public class ItemCatServiceImpl implements ItemCatService {
 	}
 	
 	
-	@Override
+		@Override
 	public PageResult findPage(TbItemCat itemCat, int pageNum, int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);
 		
@@ -100,7 +96,7 @@ public class ItemCatServiceImpl implements ItemCatService {
 		}
 		
 		Page<TbItemCat> page= (Page<TbItemCat>)itemCatMapper.selectByExample(example);		
-		return new PageResult((int) page.getTotal(), page.getResult());
+		return new PageResult(page.getTotal(), page.getResult());
 	}
 		
 	@Autowired

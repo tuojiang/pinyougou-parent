@@ -1,5 +1,6 @@
 package com.pinyougou.content.service;
 import java.util.List;
+
 import com.pinyougou.pojo.TbContent;
 
 import entity.PageResult;
@@ -21,7 +22,7 @@ public interface ContentService {
 	 * 返回分页列表
 	 * @return
 	 */
-	public PageResult findPage(int pageNum, int pageSize);
+	public PageResult findPage(int pageNum,int pageSize);
 	
 	
 	/**
@@ -48,7 +49,7 @@ public interface ContentService {
 	 * 批量删除
 	 * @param ids
 	 */
-	public void delete(Long[] ids);
+	public void delete(Long [] ids);
 
 	/**
 	 * 分页
@@ -56,12 +57,10 @@ public interface ContentService {
 	 * @param pageSize 每页记录数
 	 * @return
 	 */
-	public PageResult findPage(TbContent content, int pageNum, int pageSize);
+	public PageResult findPage(TbContent content, int pageNum,int pageSize);
 	
 	/**
-	 * 根据广告分类ID查询广告列表
-	 * @param categoryId
-	 * @return
+	 * 根据广告分类ID查询广告
 	 */
 	public List<TbContent> findByCategoryId(Long categoryId);
 	

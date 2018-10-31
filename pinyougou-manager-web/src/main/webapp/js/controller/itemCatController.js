@@ -1,5 +1,5 @@
  //控制层 
-app.controller('itemCatController' ,function($scope,$controller   ,itemCatService){
+app.controller('itemCatController' ,function($scope,$controller   ,itemCatService){	
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -37,14 +37,13 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 		if($scope.entity.id!=null){//如果有ID
 			serviceObject=itemCatService.update( $scope.entity ); //修改  
 		}else{
-			$scope.entity.parentId = $scope.parentId;//赋值上级ID
 			serviceObject=itemCatService.add( $scope.entity  );//增加 
 		}				
 		serviceObject.success(
 			function(response){
-				if(response.success){
+				if(response.flag){
 					//重新查询 
-		        	$scope.findByParentId($scope.parentId);//重新加载
+		        	$scope.reloadList();//重新加载
 				}else{
 					alert(response.message);
 				}
@@ -58,9 +57,9 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 		//获取选中的复选框			
 		itemCatService.dele( $scope.selectIds ).success(
 			function(response){
-				if(response.success){
-                    $scope.findByParentId($scope.parentId);//刷新列表
-					$scope.selectIds=[];
+				if(response.flag){
+					$scope.reloadList();//刷新列表
+					$scope.selectIds = [];
 				}						
 			}		
 		);				
@@ -77,58 +76,46 @@ app.controller('itemCatController' ,function($scope,$controller   ,itemCatServic
 			}			
 		);
 	}
-
-    $scope.parentId = 0;
-
-	//根据上级分类ID查询列表
-	$scope.findByParentId=function(parentId){
-		$scope.parentId = parentId;
-
-		itemCatService.findByParentId(parentId).success(
-			function(response){
-				$scope.list=response;				
-			}
-		);		
-	}
-
-
-	$scope.grade=1;//当前级别
-	//设置级别 
-	$scope.setGrade=function(value){
-		$scope.grade=value;
-	}
-
-	$scope.typeList={data:[]};//类型列表
-
-    //读取类型列表
-    $scope.findTypeList=function(){
-        typeTemplateService.selectOptionList().success(
-            function(response){
-                $scope.typeList={data:response};
-            }
-        );
-    }
 	
-	$scope.selectList=function(p_entity){
-		//alert($scope.grade);
+	// 根据父ID查询分类
+	$scope.findByParentId =function(parentId){
+		itemCatService.findByParentId(parentId).success(function(response){
+			$scope.list=response;
+		});
+	}
+	
+	// 定义一个变量记录当前是第几级分类
+	$scope.grade = 1;
+	
+	$scope.setGrade = function(value){
+		$scope.grade = value;
+	}
+	
+	$scope.selectList = function(p_entity){
 		
-		if($scope.grade==1){
-			$scope.entity_1=null;
-			$scope.entity_2=null;
+		if($scope.grade == 1){
+			$scope.entity_1 = null;
+			$scope.entity_2 = null;
 		}
-		if($scope.grade==2){
-			
-			$scope.entity_1=p_entity;
-			$scope.entity_2=null;
+		if($scope.grade == 2){
+			$scope.entity_1 = p_entity;
+			$scope.entity_2 = null;
 		}
-		if($scope.grade==3){
-			$scope.entity_2=p_entity;
+		if($scope.grade == 3){
+			$scope.entity_2 = p_entity;
 		}
 		
 		$scope.findByParentId(p_entity.id);
-		
 	}
-
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+    
 });	
