@@ -39,5 +39,11 @@ app.controller('cartController',function($scope,cartService){
 		}
 	}
 	*/
-	
+	//获取地址
+	$scope.findAddressList = function () {
+		cartService.findAddressList().success(
+			function (response) {
+				$scope.addressList=response;
+        });
+    }
 });

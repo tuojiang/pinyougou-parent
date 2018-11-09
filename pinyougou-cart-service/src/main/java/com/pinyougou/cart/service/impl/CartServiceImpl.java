@@ -1,5 +1,6 @@
 package com.pinyougou.cart.service.impl;
 
+import com.alibaba.dubbo.config.annotation.Service;
 import com.pinyougou.mapper.TbItemMapper;
 import com.pinyougou.pojo.TbItem;
 import com.pinyougou.pojo.TbOrderItem;
@@ -18,6 +19,7 @@ import java.util.List;
  * @Author: chandler
  * @Description:
  */
+@Service
 public class CartServiceImpl implements CartService {
 
     @Autowired
